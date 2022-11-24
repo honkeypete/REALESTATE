@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class AudioCommentaries : MonoBehaviour
 {
-    [SerializeField] public AudioSource audioSource { get; private set; }
+    public AudioSource audioSource;
     public AudioClip interactClip;
+    bool isAudioPlaying = false;
 
 
     // Start is called before the first frame update
@@ -17,9 +18,32 @@ public class AudioCommentaries : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Interaction.Instance.CurrentTooltip.TryGetComponent(out AudioSource audioSource) == true)
+        if (Interaction.Instance.CurrentTooltip != null)
         {
-            audioSource.PlayOneShot(interactClip);
+            if (Interaction.Instance.CurrentTooltip.gameObject == this.gameObject)
+            {
+                
+                    if (isAudioPlaying == false)
+                    {
+                        audioSource.PlayOneShot(interactClip);
+                        isAudioPlaying = true;
+                    }
+                
+            }
+            else
+            {
+
+                audioSource.Stop();
+                isAudioPlaying = false;
+
+            }
+        }
+        else
+        {
+
+            audioSource.Stop();
+            isAudioPlaying = false;
+
         }
     }
 }
